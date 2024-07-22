@@ -30,6 +30,6 @@ def add(numbers):
                 total += n
     
     if negatives:
-        raise Exception(f"negatives not allowed)
+        raise Exception(f"negatives not allowed")
     
     return total
