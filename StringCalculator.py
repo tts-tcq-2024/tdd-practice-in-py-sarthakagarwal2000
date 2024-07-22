@@ -1,28 +1,36 @@
-# StringCalculator.py
+import re
 
-def strip_delimiters(text):
+def extract_delimiters(input_string):
     default_delimiters = [",", ";", "\n"]
-    for delimiter in default_delimiters:
-        text = text.replace(delimiter, '')
-    return text
+    custom_delimiters = []
 
-def add_numbers(number_string):
-    if not number_string:
+    if input_string.startswith("//"):
+        parts = input_string.split("\n", 1)
+        delimiter_part = parts[0][2:]
+        custom_delimiters = re.findall(r'\[(.*?)\]', delimiter_part) or [delimiter_part]
+        input_string = parts[1]
+
+    delimiters = default_delimiters + custom_delimiters
+    return input_string, delimiters
+
+def remove_delimiters(input_string, delimiters):
+    for delimiter in delimiters:
+        input_string = input_string.replace(delimiter, ',')
+    return input_string
+
+def add(numbers):
+    if not numbers:
         return 0
 
-    cleaned_string = strip_delimiters(number_string)
-    total = 0
-    negatives = []
+    cleaned_string, delimiters = extract_delimiters(numbers)
+    cleaned_string = remove_delimiters(cleaned_string, delimiters)
 
-    for number in cleaned_string.split():
-        if number:
-            value = int(number)
-            if value < 0:
-                negatives.append(value)
-            elif value <= 1000:
-                total += value
-
+    nums = [int(num) for num in cleaned_string.split(',') if num]
+    
+    negatives = [num for num in nums if num < 0]
     if negatives:
         raise ValueError(f"Negative numbers not allowed: {', '.join(map(str, negatives))}")
+
+    total = sum(num for num in nums if 0 <= num <= 1000)
 
     return total
