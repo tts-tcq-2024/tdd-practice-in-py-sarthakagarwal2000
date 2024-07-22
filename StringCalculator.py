@@ -10,7 +10,7 @@ def preprocess_input(input_text):
 def filter_numbers_beyond_limit(numbers):
     return [int(num) for num in numbers if 0 <= int(num) <= 1000]
 
-def compute_total(input_text):
+def add(input_text):
     if not input_text:
         return 0
     
