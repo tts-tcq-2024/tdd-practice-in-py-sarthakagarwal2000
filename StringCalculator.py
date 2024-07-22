@@ -25,10 +25,16 @@ def extract_number_string(input_string):
 def parse_numbers(number_string):
     return [int(num) for num in number_string.split(',') if num]
 
+def get_negative_numbers(nums):
+    return [num for num in nums if num < 0]
+
+def format_negative_error_message(negatives):
+    return "Negative numbers not allowed: " + ", ".join(map(str, negatives))
+
 def check_for_negatives(nums):
-    negatives = [num for num in nums if num < 0]
+    negatives = get_negative_numbers(nums)
     if negatives:
-        raise ValueError(f"Negative numbers not allowed: {', '.join(map(str, negatives))}")
+        raise ValueError(format_negative_error_message(negatives))
 
 def sum_valid_numbers(nums):
     return sum(num for num in nums if 0 <= num <= 1000)
