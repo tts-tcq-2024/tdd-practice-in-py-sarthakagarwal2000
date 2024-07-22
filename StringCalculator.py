@@ -23,22 +23,14 @@ def add(numbers):
         return [int(num) for num in num_list if num]
 
     def validate_numbers(nums):
-        # Separate negative numbers and sum of valid numbers in one pass
-        total = 0
-        negatives = []
-
-        for n in nums:
-            if n < 0:
-                negatives.append(n)
-            elif n <= 1000:
-                total += n
-
+        negatives = [n for n in nums if n < 0]
+        total = sum(n for n in nums if 0 <= n <= 1000)
         return total, negatives
 
     nums = parse_numbers(numbers)
     total, negatives = validate_numbers(nums)
 
     if negatives:
-        raise ValueError(f"Negative numbers not allowed: {negatives}")
+        raise ValueError(f"Negative numbers not allowed: {', '.join(map(str, negatives))}")
 
     return total
