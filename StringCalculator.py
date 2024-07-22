@@ -23,8 +23,15 @@ def add(numbers):
         return [int(num) for num in num_list if num]
 
     def validate_numbers(nums):
-        negatives = [n for n in nums if n < 0]
-        total = sum(n for n in nums if 0 <= n <= 1000)
+        negatives = []
+        total = 0
+
+        for n in nums:
+            if n < 0:
+                negatives.append(n)
+            elif n <= 1000:
+                total += n
+
         return total, negatives
 
     nums = parse_numbers(numbers)
