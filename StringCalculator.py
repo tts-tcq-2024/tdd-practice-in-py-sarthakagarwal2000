@@ -1,36 +1,50 @@
 import re
 
-def extract_delimiters(input_string):
-    default_delimiters = [",", ";", "\n"]
-    custom_delimiters = []
-
+def extract_custom_delimiters(input_string):
     if input_string.startswith("//"):
-        parts = input_string.split("\n", 1)
-        delimiter_part = parts[0][2:]
-        custom_delimiters = re.findall(r'\[(.*?)\]', delimiter_part) or [delimiter_part]
-        input_string = parts[1]
+        delimiter_part = input_string.split("\n", 1)[0][2:]
+        return re.findall(r'\[(.*?)\]', delimiter_part) or [delimiter_part]
+    return []
 
-    delimiters = default_delimiters + custom_delimiters
-    return input_string, delimiters
+def get_default_delimiters():
+    return [",", ";", "\n"]
 
-def remove_delimiters(input_string, delimiters):
+def combine_delimiters(default_delimiters, custom_delimiters):
+    return default_delimiters + custom_delimiters
+
+def replace_delimiters(input_string, delimiters):
     for delimiter in delimiters:
         input_string = input_string.replace(delimiter, ',')
     return input_string
+
+def extract_number_string(input_string):
+    if input_string.startswith("//"):
+        return input_string.split("\n", 1)[1]
+    return input_string
+
+def parse_numbers(number_string):
+    return [int(num) for num in number_string.split(',') if num]
+
+def check_for_negatives(nums):
+    negatives = [num for num in nums if num < 0]
+    if negatives:
+        raise ValueError(f"Negative numbers not allowed: {', '.join(map(str, negatives))}")
+
+def sum_valid_numbers(nums):
+    return sum(num for num in nums if 0 <= num <= 1000)
 
 def add(numbers):
     if not numbers:
         return 0
 
-    cleaned_string, delimiters = extract_delimiters(numbers)
-    cleaned_string = remove_delimiters(cleaned_string, delimiters)
-
-    nums = [int(num) for num in cleaned_string.split(',') if num]
+    custom_delimiters = extract_custom_delimiters(numbers)
+    default_delimiters = get_default_delimiters()
+    all_delimiters = combine_delimiters(default_delimiters, custom_delimiters)
     
-    negatives = [num for num in nums if num < 0]
-    if negatives:
-        raise ValueError(f"Negative numbers not allowed: {', '.join(map(str, negatives))}")
+    number_string = extract_number_string(numbers)
+    cleaned_string = replace_delimiters(number_string, all_delimiters)
+    nums = parse_numbers(cleaned_string)
 
-    total = sum(num for num in nums if 0 <= num <= 1000)
-
-    return total
+    check_for_negatives(nums)
+    
+    return sum_valid_numbers(nums)
