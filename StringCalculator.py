@@ -22,9 +22,8 @@ def add(numbers):
         return [int(num) for num in num_list if num]
 
     def validate_numbers(nums):
-        total = 0
         negatives = [n for n in nums if n < 0]
-        total = sum(n for n in nums if n >= 0 and n <= 1000)
+        total = sum(n for n in nums if 0 <= n <= 1000)
         return total, negatives
 
     nums = parse_numbers(numbers)
@@ -33,19 +32,4 @@ def add(numbers):
     if negatives:
         raise ValueError(f"Negative numbers not allowed: {negatives}")
 
-    return total
-
-
-    nums = parse_numbers(numbers)
-    total, negatives = validate_numbers(nums)
-
-    if negatives:
-        raise ValueError(f"Negative numbers not allowed: {negatives}")
-
-    return total
-
-    
-    if negatives:
-        raise Exception(f"negatives not allowed")
-    
     return total
