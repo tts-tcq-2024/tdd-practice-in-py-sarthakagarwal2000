@@ -1,3 +1,5 @@
+import re
+
 def remove_delimiters(input_string):
     delimiters = [",", "\n"]
     if input_string.startswith("//"):
@@ -15,11 +17,19 @@ def add(numbers):
     if not numbers:
         return 0
     
-    cleaned_numbers = remove_delimiters(numbers)
+    num_list = remove_delimiters(numbers).split(',')
     total = 0
+    negatives = []
     
-    for num in cleaned_numbers.split(','):
+    for num in num_list:
         if num:
-            total += int(num)
+            n = int(num)
+            if n < 0:
+                negatives.append(n)
+            elif n <= 1000:
+                total += n
+    
+    if negatives:
+        raise Exception(f"negatives not allowed: {', '.join(map(str, negatives))}")
     
     return total
