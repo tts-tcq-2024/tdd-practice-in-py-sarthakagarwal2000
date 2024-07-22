@@ -1,36 +1,29 @@
-import re
+default_delimiters = [",", ";", "\n"]
 
-def remove_delimiters(input_string):
-    delimiters = [",", "\n"]
-    
-    if input_string.startswith("//"):
-        parts = input_string.split("\n", 1)
-        custom_delimiter = parts[0][2:]
-        delimiters.append(custom_delimiter)
-        input_string = parts[1]
-    
-    for delimiter in delimiters:
-        input_string = input_string.replace(delimiter, ',')
-    
-    return input_string
+def strip_delimiters(text):
 
-def add(numbers):
-    if not numbers:
+    for delimiter in default_delimiters:
+        text = text.replace(delimiter, '')
+    return text
+
+def add_numbers(number_string):
+
+    if not number_string:
         return 0
 
-    def parse_numbers(num_str):
-        num_list = remove_delimiters(num_str).split(',')
-        return [int(num) for num in num_list if num]
 
-    def validate_numbers(nums):
-        negatives = [n for n in nums if n < 0]
-        valid_numbers = (n for n in nums if 0 <= n <= 1000)
-        total = sum(valid_numbers)
+    cleaned_string = strip_delimiters(number_string)
 
-        return total, negatives
+    total = 0
+    negatives = []
 
-    nums = parse_numbers(numbers)
-    total, negatives = validate_numbers(nums)
+    for number in cleaned_string.split():
+        if number:
+            value = int(number)
+            if value < 0:
+                negatives.append(value)
+            elif value <= 1000:
+                total += value
 
     if negatives:
         raise ValueError(f"Negative numbers not allowed: {', '.join(map(str, negatives))}")
